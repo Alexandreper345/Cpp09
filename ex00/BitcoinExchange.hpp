@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <stdexcept>
 
 class BitcoinExchange
 {
@@ -18,6 +19,7 @@ public:
 	BitcoinExchange(std::string file);
 	BitcoinExchange(const BitcoinExchange &other);
 	BitcoinExchange &operator=(const BitcoinExchange &other);
+	bool validDate(const std::string& date);
 	~BitcoinExchange();
 
 	void	save_in_database(void);
