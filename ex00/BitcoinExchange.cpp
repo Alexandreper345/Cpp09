@@ -108,7 +108,7 @@ BitcoinExchange::BitcoinExchange(std::string file)
 		{
 			std::string cleanValue = trim(value);
 			valueDouble = std::stod(cleanValue, &idx);
-			if (idx != value.size())
+			if (idx != cleanValue.size())
         		throw std::invalid_argument("extra chars");
 		}
 		catch (const std::exception &e)
@@ -116,13 +116,13 @@ BitcoinExchange::BitcoinExchange(std::string file)
 			std::cerr << "Error: invalid value => " << value << std::endl;
 			continue;
 		}
-		
+		/*
 		if (data.find(date) != data.end())
 		{
-    		std::cerr << "Error: duplicate date => " << date << std::endl;
-   			continue;
+			std::cerr << "Error: duplicate date => " << date << std::endl;
+			continue;
 		}
-		
+		*/
 		if (valueDouble < 0)
 		{
 			std::cerr << "Error: not a positive number => " << value << std::endl;
@@ -142,12 +142,17 @@ BitcoinExchange::BitcoinExchange(std::string file)
 		std::map<std::string, double>::iterator it = this->_database.lower_bound(date);
 		if (it == this->_database.end())
 			it = --this->_database.end();
-		else if (it->first != date && it != this->_database.begin())
+		else if (it == _database.begin() && it->first != date)
+		{
+			std::cerr << "Error: date too early => " << date << std::endl;
+			continue;
+		}
+		else if (it->first > date)
 		{
 			--it;
 		}
 		std::cout << date << " => " << valueDouble << " = " << valueDouble * it->second << std::endl;
-		data[date] = valueDouble;
+		//data[date] = valueDouble;
 	}
 }
 
